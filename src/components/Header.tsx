@@ -1,15 +1,10 @@
 
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Moon, Sun } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-interface HeaderProps {
-  isDark: boolean;
-  toggleTheme: () => void;
-}
-
-const Header = ({ isDark, toggleTheme }: HeaderProps) => {
+const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
 
@@ -28,10 +23,10 @@ const Header = ({ isDark, toggleTheme }: HeaderProps) => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">SB</span>
+            <div className="w-8 h-8 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-lg flex items-center justify-center">
+              <span className="text-black font-bold text-sm">SB</span>
             </div>
-            <span className="text-xl font-bold">Stack Byte</span>
+            <span className="text-xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">Stack Byte</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -42,8 +37,8 @@ const Header = ({ isDark, toggleTheme }: HeaderProps) => {
                 to={item.href}
                 className={`text-sm font-medium transition-colors ${
                   isActive(item.href)
-                    ? 'text-primary'
-                    : 'text-muted-foreground hover:text-foreground'
+                    ? 'text-cyan-400'
+                    : 'text-muted-foreground hover:text-cyan-400'
                 }`}
               >
                 {item.name}
@@ -51,31 +46,15 @@ const Header = ({ isDark, toggleTheme }: HeaderProps) => {
             ))}
           </nav>
 
-          {/* Theme Toggle & CTA */}
-          <div className="hidden md:flex items-center space-x-4">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={toggleTheme}
-              className="w-9 h-9"
-            >
-              {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-            </Button>
-            <Button asChild>
+          {/* CTA */}
+          <div className="hidden md:flex items-center">
+            <Button asChild className="bg-gradient-to-r from-cyan-400 to-blue-500 text-black hover:from-cyan-300 hover:to-blue-400">
               <Link to="/contact">Get Started</Link>
             </Button>
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center space-x-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={toggleTheme}
-              className="w-9 h-9"
-            >
-              {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-            </Button>
+          <div className="md:hidden">
             <Button
               variant="ghost"
               size="sm"
@@ -97,8 +76,8 @@ const Header = ({ isDark, toggleTheme }: HeaderProps) => {
                   to={item.href}
                   className={`block px-3 py-2 text-base font-medium rounded-md transition-colors ${
                     isActive(item.href)
-                      ? 'text-primary bg-primary/10'
-                      : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                      ? 'text-cyan-400 bg-cyan-400/10'
+                      : 'text-muted-foreground hover:text-cyan-400 hover:bg-muted'
                   }`}
                   onClick={() => setIsMenuOpen(false)}
                 >
@@ -106,7 +85,7 @@ const Header = ({ isDark, toggleTheme }: HeaderProps) => {
                 </Link>
               ))}
               <div className="pt-4">
-                <Button asChild className="w-full">
+                <Button asChild className="w-full bg-gradient-to-r from-cyan-400 to-blue-500 text-black hover:from-cyan-300 hover:to-blue-400">
                   <Link to="/contact" onClick={() => setIsMenuOpen(false)}>
                     Get Started
                   </Link>

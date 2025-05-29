@@ -4,6 +4,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/" />
     <title>Stack Byte - AI-Powered Landing Pages for Businesses</title>
     <meta name="description" content="Professional AI-powered landing pages that convert. Custom design, fast delivery, and proven results for your business. Get your landing page today." />
     <meta name="keywords" content="AI landing pages, professional landing page design, conversion optimization, business landing pages, custom web design" />
@@ -57,5 +58,15 @@
     <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      // Error handling for debugging
+      window.addEventListener('error', function(e) {
+        console.error('Global error:', e.error);
+      });
+      
+      window.addEventListener('unhandledrejection', function(e) {
+        console.error('Unhandled promise rejection:', e.reason);
+      });
+    </script>
   </body>
 </html>

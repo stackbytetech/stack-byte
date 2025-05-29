@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Mail, Clock, Shield } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -15,24 +16,54 @@ const Contact = () => {
     message: '',
     projectType: 'landing-page'
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
     
-    // Simulate form submission
-    toast({
-      title: "Message sent!",
-      description: "We'll get back to you within 24 hours.",
-    });
-    
-    // Reset form
-    setFormData({
-      name: '',
-      email: '',
-      message: '',
-      projectType: 'landing-page'
-    });
+    try {
+      const { error } = await supabase
+        .from('contact_submissions')
+        .insert({
+          name: formData.name,
+          email: formData.email,
+          project_type: formData.projectType,
+          message: formData.message
+        });
+
+      if (error) {
+        console.error('Error submitting form:', error);
+        toast({
+          title: "Error",
+          description: "Failed to send message. Please try again.",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Message sent!",
+          description: "We'll get back to you within 24 hours.",
+        });
+        
+        // Reset form
+        setFormData({
+          name: '',
+          email: '',
+          message: '',
+          projectType: 'landing-page'
+        });
+      }
+    } catch (error) {
+      console.error('Unexpected error:', error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -84,6 +115,7 @@ const Contact = () => {
                         required
                         placeholder="Your full name"
                         className="bg-slate-800/50 border-cyan-400/20"
+                        disabled={isSubmitting}
                       />
                     </div>
                     <div>
@@ -97,6 +129,7 @@ const Contact = () => {
                         required
                         placeholder="your@email.com"
                         className="bg-slate-800/50 border-cyan-400/20"
+                        disabled={isSubmitting}
                       />
                     </div>
                   </div>
@@ -109,6 +142,7 @@ const Contact = () => {
                       value={formData.projectType}
                       onChange={handleChange}
                       className="w-full mt-1 px-3 py-2 border border-cyan-400/20 rounded-md bg-slate-800/50"
+                      disabled={isSubmitting}
                     >
                       <option value="landing-page">Landing Page</option>
                       <option value="custom">Custom Project</option>
@@ -126,11 +160,17 @@ const Contact = () => {
                       placeholder="Describe your business, goals, and any specific requirements..."
                       rows={6}
                       className="bg-slate-800/50 border-cyan-400/20"
+                      disabled={isSubmitting}
                     />
                   </div>
 
-                  <Button type="submit" className="w-full bg-gradient-to-r from-cyan-400 to-blue-500 text-black hover:from-cyan-300 hover:to-blue-400" size="lg">
-                    Send Message
+                  <Button 
+                    type="submit" 
+                    className="w-full bg-gradient-to-r from-cyan-400 to-blue-500 text-black hover:from-cyan-300 hover:to-blue-400" 
+                    size="lg"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? 'Sending...' : 'Send Message'}
                   </Button>
                 </form>
               </CardContent>
